@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Todo } from '../models/todo.model';
+import { Task } from '../models/task.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,16 +14,16 @@ export class TaskApiService {
 
   }
 
-  getTasks(): Observable<Todo[]> {
-    return this.http.get<Todo[]>(this.apiUrl);
+  getTasks(): Observable<Task[]> {
+    return this.http.get<Task[]>(this.apiUrl);
   }
 
-  createTask(task: Partial<Todo>): Observable<Todo> {
-    return this.http.post<Todo>(this.apiUrl, task);
+  createTask(task: Partial<Task>): Observable<Task> {
+    return this.http.post<Task>(this.apiUrl, task);
   }
 
-  updateTask(taskId: string, task: Partial<Todo>): Observable<Todo> {
-    return this.http.put<Todo>(`${this.apiUrl}/${taskId}`, task);
+  updateTask(taskId: string, task: Partial<Task>): Observable<Task> {
+    return this.http.put<Task>(`${this.apiUrl}/${taskId}`, task);
   }
 
   deleteTask(taskId: string): Observable<any> {

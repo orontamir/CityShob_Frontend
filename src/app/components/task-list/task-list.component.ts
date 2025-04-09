@@ -2,8 +2,8 @@ import { Component, HostListener  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { Todo } from '../../models/todo.model';
-import { TodoService } from '../../services/todo.service';
+import { Task } from '../../models/task.model';
+import { TaskService } from '../../services/task.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -18,7 +18,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { MatTableModule } from '@angular/material/table';
 
 @Component({
-  selector: 'app-todo-list',
+  selector: 'app-task-list',
   standalone: true,
   imports: [
     MatTableModule,
@@ -36,8 +36,8 @@ import { MatTableModule } from '@angular/material/table';
     MatDatepickerModule,
     MatNativeDateModule
   ],
-  templateUrl: './todo-list.component.html',
-  styleUrls: ['./todo-list.component.css'],
+  templateUrl: './task-list.component.html',
+  styleUrls: ['./task-list.component.css'],
   animations: [
     trigger('transitionMessages', [
       transition(':enter', [
@@ -50,73 +50,73 @@ import { MatTableModule } from '@angular/material/table';
     ])
   ]
 })
-export class TodoListComponent {
-  todos$: Observable<Todo[]>;
-  newTodoControl = new FormControl('');
+export class TaskListComponent {
+  tasks$: Observable<Task[]>;
+  newTaskControl = new FormControl('');
   displayedColumns: string[] = ['id', 'title', 'completed', 'edit', 'delete'];
-  dataSource: Todo[];
+  dataSource: Task[];
   editingId: string | null = null;
-  constructor(private todoService: TodoService) {
-    this.todos$ = this.todoService.todos$;
+  constructor(private taskService: TaskService) {
+    this.tasks$ = this.taskService.tasks$;
     this.dataSource = [];
 
   }
   ngOnInit(): void {
-    this.todos$.subscribe((todos: Todo[]) => {
-      todos.map(todo =>
-        todo._id === this.editingId ? { ...todo, locked: false } : todo
+    this.tasks$.subscribe((tasks: Task[]) => {
+      tasks.map(task =>
+        task._id === this.editingId ? { ...task, locked: false } : task
       )
-      this.dataSource = todos;
+      this.dataSource = tasks;
     });
   }
 
-  addTodo(): void {
-    const title = this.newTodoControl.value?.trim();
+  addTask(): void {
+    const title = this.newTaskControl.value?.trim();
     if (title) {
-      this.todoService.addTodo(title);
-      this.newTodoControl.reset();
+      this.taskService.addTask(title);
+      this.newTaskControl.reset();
     }
   }
 
-  enableEditing(todo: Todo): void {
-    if (todo.locked) {
+  enableEditing(task: Task): void {
+    if (task.locked) {
       alert('Cannot edit a task that is being edited by another user.');
       return;
     }
-    this.editingId = todo._id;
-    todo.locked = true;
-    this.todoService.updateTodo(todo, todo.title);
+    this.editingId = task._id;
+    task.locked = true;
+    this.taskService.updateTask(task, task.title);
   }
 
-  updateTitle(event: any, todo: Todo): void {
-    if (todo.title !== event.target.value)
+  updateTitle(event: any, task: Task): void {
+    if (task.title !== event.target.value)
     {
-      todo.title = event.target.value;
+      task.title = event.target.value;
       this.editingId = null;
-      todo.locked = false;
-      this.todoService.updateTodo(todo, todo.title);
+      task.locked = false;
+      this.taskService.updateTask(task, task.title);
     }
   }
 
-  updatecompleted(todo:Todo): void{
-    if (todo.locked) {
-      todo.completed = !todo.completed;
+  updatecompleted(task: Task): void{
+    if (task.locked) {
+      task.completed = !task.completed;
       alert('Cannot update completed task that is being edited by another user.');
 
       return;
     }
-    this.todoService.updateTodo(todo, todo.title);
+    this.taskService.updateTask(task, task.title);
   }
 
-  deleteRow(todo: Todo): void {
-    if (todo.locked) {
+  deleteRow(task: Task): void {
+    if (task.locked) {
       alert('Cannot delete a task that is being edited by another user.');
       return;
     }
-    const index = this.dataSource.findIndex(element => element._id === todo._id);
+    const index = this.dataSource.findIndex(element => element._id === task._id);
     if (index > -1) {
       this.dataSource.splice(index, 1);
-      this.todoService.deleteTodo(todo);
+      this.taskService.deleteTask(task);
       this.dataSource = [...this.dataSource];
     }
   }
@@ -125,10 +125,10 @@ export class TodoListComponent {
   handleBeforeUnload(event: BeforeUnloadEvent): void {
     if (this.editingId)
     {
-      const todo = this.dataSource.find(todo => todo._id === this.editingId);
-      if (todo) {
-        todo.locked = false;
-        this.todoService.updateTodo(todo, todo.title);
+      const task = this.dataSource.find(task => task._id === this.editingId);
+      if (task) {
+        task.locked = false;
+        this.taskService.updateTask(task, task.title);
       }
     }
   }

@@ -1,9 +1,9 @@
-<div class="todo-container" style="max-width: 600px; margin: auto; padding: 1rem;">
+<div class="task-container" style="max-width: 600px; margin: auto; padding: 1rem;">
   <mat-form-field style="width: 100%;">
     <mat-label>New Task</mat-label>
-    <input matInput [formControl]="newTodoControl" placeholder="Enter a new task" (keyup.enter)="addTodo()">
+    <input matInput [formControl]="newTaskControl" placeholder="Enter a new task" (keyup.enter)="addTask()">
   </mat-form-field>
-  <button mat-raised-button color="primary" (click)="addTodo()">Add Task</button>
+  <button mat-raised-button color="primary" (click)="addTask()">Add Task</button>
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;">
 
     <!-- ID Column -->
