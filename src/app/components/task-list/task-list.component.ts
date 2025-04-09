@@ -53,7 +53,7 @@ import { MatTableModule } from '@angular/material/table';
 export class TaskListComponent {
   tasks$: Observable<Task[]>;
   newTaskControl = new FormControl('');
-  displayedColumns: string[] = ['id', 'title', 'completed', 'edit', 'delete'];
+  displayedColumns: string[] = [ 'task', 'completed', 'edit', 'delete'];
   dataSource: Task[];
   editingId: string | null = null;
   constructor(private taskService: TaskService) {
@@ -71,9 +71,9 @@ export class TaskListComponent {
   }
 
   addTask(): void {
-    const title = this.newTaskControl.value?.trim();
-    if (title) {
-      this.taskService.addTask(title);
+    const task = this.newTaskControl.value?.trim();
+    if (task) {
+      this.taskService.addTask(task);
       this.newTaskControl.reset();
     }
   }
@@ -88,7 +88,7 @@ export class TaskListComponent {
     this.taskService.updateTask(task, task.title);
   }
 
-  updateTitle(event: any, task: Task): void {
+  updateTask(event: any, task: Task): void {
     if (task.title !== event.target.value)
     {
       task.title = event.target.value;

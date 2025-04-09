@@ -7,30 +7,30 @@
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;">
 
     <!-- ID Column -->
-    <ng-container matColumnDef="id">
+    <!--<ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef> ID </th>
       <td mat-cell *matCellDef="let row"> {{ row._id }} </td>
-    </ng-container>
+    </ng-container> -->
 
-    <!-- Title Column with Inline Editing -->
-    <ng-container matColumnDef="title">
-      <th mat-header-cell *matHeaderCellDef> Title </th>
+    <!-- Task Column with Inline Editing -->
+    <ng-container matColumnDef="task" >
+      <th  *matHeaderCellDef style="width: 100%;"> Task </th>
       <td mat-cell *matCellDef="let row">
-        <div *ngIf="editingId !== row._id" (click)="enableEditing(row)" style="cursor: pointer;">
+        <div class="task-column" *ngIf="editingId !== row._id" (click)="enableEditing(row)" style="cursor: pointer;">
           {{ row.title }}
         </div>
-        <!-- Input field for editing title -->
+        <!-- Input field for editing task -->
         <input *ngIf="editingId === row._id"
                [value]="row.title"
-               (blur)="updateTitle($event, row)"
-               (keydown.enter)="updateTitle($event, row)"
+               (blur)="updateTask($event, row)"
+               (keydown.enter)="updateTask($event, row)"
                autofocus />
       </td>
     </ng-container>
 
     <!-- Completed Column with Checkbox -->
     <ng-container matColumnDef="completed">
-      <th mat-header-cell *matHeaderCellDef> Completed </th>
+      <th *matHeaderCellDef> Completed </th>
       <td mat-cell *matCellDef="let row">
         <mat-checkbox [(ngModel)]="row.completed" (click)="updatecompleted(row)"></mat-checkbox>
       </td>
@@ -38,10 +38,10 @@
 
     <!-- Edit Column with Button -->
     <ng-container matColumnDef="edit">
-      <th mat-header-cell *matHeaderCellDef> Edit </th>
+      <th  *matHeaderCellDef > Edit </th>
       <td mat-cell *matCellDef="let row">
         <div *ngIf="editingId === row._id">
-          <button mat-button (click)="updateTitle($event, row)">Save</button>
+          <button mat-button (click)="updateTask($event, row)">Save</button>
         </div>
         <div *ngIf="editingId !== row._id">
           <button mat-button (click)="enableEditing(row)">Edit</button>
@@ -51,7 +51,7 @@
 
     <!-- Delete Column with Button -->
     <ng-container matColumnDef="delete">
-      <th mat-header-cell *matHeaderCellDef> Delete </th>
+      <th  *matHeaderCellDef> Delete </th>
       <td mat-cell *matCellDef="let row">
         <button mat-button color="warn" (click)="deleteRow(row)">Delete</button>
       </td>
